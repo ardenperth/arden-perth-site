@@ -71,49 +71,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Signup: local fallback + optional remote post
+  // Form
   const form = document.getElementById('signupForm');
   const msg = document.getElementById('formMessage');
 
-  // Attempt to send to configured endpoint if present (configure below)
-  const remoteEndpoint = '' // <-- optionally set to your mail provider form action (e.g., Formspree endpoint)
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    if (!email || !validateEmail(email)) {
-      showMessage('Please enter a valid email.', true);
-      return;
-    }
-    if (remoteEndpoint) {
-      try {
-        const res = await fetch(remoteEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email })
-        });
-        if (res.ok) showMessage('Thanks — you are subscribed!', false);
-        else showMessage('Remote signup failed. Saved locally as backup.', true);
-      } catch (err) {
-        console.error(err);
-        showMessage('Network error. Saved locally as backup.', true);
-      }
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      form.reset();
+      msg.textContent = 'Thanks — you are subscribed!';
     } else {
-      // fallback: save locally
-      saveLocal({name, email, date: new Date().toISOString()});
-      showMessage('Saved locally — configure a remote endpoint.', false);
+      msg.textContent = 'Something went wrong. Please try again.';
     }
   });
-
-  function validateEmail(e) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  }
-
-  function showMessage(text, isError=false) {
-    msg.textContent = text;
-    msg.style.color = isError ? '#e64438' : 'var(--accent)';
-    setTimeout(()=> { msg.textContent=''; }, 6000);
-  }
 
 });
