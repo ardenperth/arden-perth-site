@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Arden Perth — Author</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;600;700&family=JetBrains+Mono:wght@200&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Arden Perth — Author of The Vanishing Set, a work of literary espionage fiction." />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="site-hero" id="top" aria-hidden="false">
+    <div class="hero-inner">
+      <div class="title-block">
+        <h1 class="author-title"><a href="index.html">Arden Perth</a></h1>
+        <p class="subhead">
+          Thank you! Your subscription has been submitted.
+        </p>
+
+  <footer>
+    <p>© Arden Perth 2026</p>
+    <button id="backToTop" class="fab" aria-label="Back to top">↑</button>
+  </footer>
+
+  <!--<script src="script.js" defer></script>-->
+  <script>
+    // Basic interactions: reveal outtakes, signup form handling (local fallback), back-to-top
+    document.addEventListener('DOMContentLoaded', () => {
+      // Anchor scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+          const id = link.getAttribute('href');
+
+          if (!id || id === '#') return;
+
+          const target = document.querySelector(id);
+          if (!target) return;
+
+          e.preventDefault();
+
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+          // Optional: update URL without forcing reflow
+          history.replaceState(null, '', id);
+        });
+      });
+      // Reveal buttons
+      document.querySelectorAll('.reveal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.previousElementSibling;
+          if (!content) return;
+
+          const isOpen = content.classList.contains('is-open');
+
+          if (isOpen) {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            requestAnimationFrame(() => {
+              content.style.maxHeight = '0px';
+            });
+            content.classList.remove('is-open');
+            btn.textContent = 'Read more';
+            btn.setAttribute('aria-expanded', 'false');
+          } else {
+            content.classList.add('is-open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            btn.textContent = 'Collapse';
+            btn.setAttribute('aria-expanded', 'true');
+
+            content.addEventListener(
+              'transitionend',
+              () => {
+                if (content.classList.contains('is-open')) {
+                  content.style.maxHeight = 'none';
+                }
+              },
+              { once: true }
+            );
+          }
+        });
+      });
+
+      // Back to top
+      const topBtn = document.getElementById('backToTop');
+      topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) topBtn.style.display = 'flex';
+        else topBtn.style.display = 'none';
+      });
+
+      // Signup: local fallback + optional remote post
+      const form = document.getElementById('signupForm');
+      const msg = document.getElementById('formMessage');
+      const localBtn = document.getElementById('localSave');
+
+      // Attempt to send to configured endpoint if present (configure below)
+      const remoteEndpoint = '' // <-- optionally set to your mail provider form action (e.g., Formspree endpoint)
+
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        if (!email || !validateEmail(email)) {
+          showMessage('Please enter a valid email.', true);
+          return;
+        }
+        if (remoteEndpoint) {
+          try {
+            const res = await fetch(remoteEndpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email })
+            });
+            if (res.ok) showMessage('Thanks — you are subscribed!', false);
+            else showMessage('Remote signup failed. Saved locally as backup.', true);
+          } catch (err) {
+            console.error(err);
+            showMessage('Network error. Saved locally as backup.', true);
+          }
+        } else {
+          // fallback: save locally
+          saveLocal({name, email, date: new Date().toISOString()});
+          showMessage('Saved locally — configure a remote endpoint (see README below).', false);
+        }
+      });
+
+      localBtn.addEventListener('click', () => {
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        if (!email || !validateEmail(email)) { showMessage('Please enter a valid email.', true); return; }
+        saveLocal({name,email,date:new Date().toISOString()});
+        showMessage('Thank you for your submission.', false);
+      });
+
+      function validateEmail(e) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+      }
+
+      function saveLocal(obj) {
+        const key = 'arden_perth_signups';
+        const list = JSON.parse(localStorage.getItem(key) || '[]');
+        list.push(obj);
+        localStorage.setItem(key, JSON.stringify(list));
+        console.log('Saved local signup:', obj);
+      }
+
+      function showMessage(text, isError=false) {
+        msg.textContent = text;
+        msg.style.color = isError ? '#f7b7b7' : 'var(--accent-2)';
+        setTimeout(()=> { msg.textContent=''; }, 6000);
+      }
+
+    });
+
+  </script>
+</body>
+</html>
