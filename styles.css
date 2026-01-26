@@ -621,6 +621,7 @@ footer p{
 /* Media Queries */
 @media (max-width:1000px){
   .hero-inner, section { padding:4rem 8vw 4rem 8vw; }
+  .artefacts { overflow-x:hidden; }
   .circle { width:5rem; height:5rem; }
   .circle:nth-of-type(5n+1) { top:50vh; }
   .circle:nth-of-type(5n+2) { top:25vh; }
