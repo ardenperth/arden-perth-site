@@ -79,7 +79,8 @@ body{
   margin:0 auto;
   display:grid;
   grid-template-columns: minmax(0, 60%) minmax(0, 40%);
-  gap:2.5rem;
+  row-gap:2.5rem;
+  column-gap:4.5rem;
 }
 .hero-inner > h1, section > h2{
   grid-column: 1 / -1;
@@ -646,25 +647,25 @@ footer p{
 @media (max-width:700px){
   .hero-inner, section { grid-template-columns:1fr; padding:2rem 6.5rem 3rem 2rem; }
   .circle { width:3rem; height:3rem; }
-  .circle:nth-of-type(5n+1) { top:47vh; }
-  .circle:nth-of-type(5n+2) { top:15vh; }
-  .circle:nth-of-type(5n+3) { top:20vh; }
-  .circle:nth-of-type(5n+4) { top:35vh; }
-  .circle:nth-of-type(5n+5) { top:42vh; }
-  .card img:nth-of-type(1) { top:50vh }
-  .card img:nth-of-type(2) { width:60vw; left:23vw; top:26vh; }
-  .card img:nth-of-type(3) { width:22vw; top:18vh; }
+  .circle:nth-of-type(5n+1) { top:37vw; }
+  .circle:nth-of-type(5n+2) { top:8vw; }
+  .circle:nth-of-type(5n+3) { top:11vw; }
+  .circle:nth-of-type(5n+4) { top:42vw; }
+  .circle:nth-of-type(5n+5) { top:48vw; }
+  .card img:nth-of-type(1) { top:52vw; }
+  .card img:nth-of-type(2) { width:60vw; left:22vw; top:20vw; }
+  .card img:nth-of-type(3) { width:22vw; top:18vw; }
   .card img:nth-of-type(5) { width:40vw; left:34vw; }
-  .card img:nth-of-type(6) { width:28vw; right:4vw; top:39vh; }
-  .card img:nth-of-type(7) { width:9vw; right:50vw; top:12vh; }
-  .anonyms { top:45vh; }
-  .rectangle { width:22vw; height:16vh; top:37vh; right:10vw; }
-  .vertical { top:21vh; }
-  .steganography img{ top:40vh; }
-  .micro-nav { top:auto; right:auto; bottom:1.5rem; left:0; padding:0 1.625rem; }
+  .card img:nth-of-type(6) { width:28vw; right:4vw; top:39vw; }
+  .card img:nth-of-type(7) { width:9vw; right:50vw; top:5vw; }
+  .anonyms { top:60vw; }
+  .rectangle { width:20vw; height:11vh; top:37vw; right:10vw; }
+  .vertical { top:32vw; width:50vw; }
+  .steganography img{ left:-2vw; top:40vw; }
+  .micro-nav { top:auto; right:0; bottom:0; left:0; width:100%; padding:1.5rem 1.625rem; background-color:var(--dark); }
   .micro-nav a { font-size:.875rem; margin-right:0.5rem; display:inline-block; }
   h1 { letter-spacing:-.25rem; }
-  footer { padding:2vh 2rem 6rem 2rem; }
+  footer { padding:2vh 2rem 10rem 2rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
